@@ -59,6 +59,7 @@ aPackageInfo = [
 		"samples/UsingJSONLib/test11.ring",
 		"samples/UsingJSONLib/test12.ring",
 		"samples/UsingJSONLib/test13.ring",
+		"samples/UsingJSONLib/test14.ring",
 		"tools/ring2exe/libs/jsonlib.ring"
 	],
 	:windowsfiles = 	[
