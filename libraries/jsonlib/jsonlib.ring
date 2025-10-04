@@ -54,17 +54,18 @@ func List2JSON aList
 func List2JSON_process aList,nTabs 
 	cOutput = ""
 	for t=1 to len(aList)
-		aSubList = aList[t]
-		if List2JSON_isObjectAttribute(aSubList)
-			cOutput += List2JSON_processObjectAttribute(aSubList,nTabs)
-		but isList(aSubList[1]) 
-			cOutput += Copy(Tab,nTabs) + List2JSON_processListValue(aSubList,nTabs)
-		but isList(aSubList)
-			cOutput += Copy(Tab,nTabs) + List2JSON_processSubList(aSubList,nTabs)
-		but isString(aSubList)
-			cOutput += Copy(Tab,nTabs) + List2JSON_processListValue(aList,nTabs)
-			exit
-		else	
+		vValue = aList[t]
+		if List2JSON_isObjectAttribute(vValue)
+			cOutput += List2JSON_processObjectAttribute(vValue,nTabs)
+		but isList(vValue) and (len(vValue) >= 1) and isList(vValue[1]) 
+			cOutput += Copy(Tab,nTabs) + List2JSON_processListValue(vValue,nTabs)
+		but isList(vValue)
+			cOutput += Copy(Tab,nTabs) + List2JSON_processSubList(vValue,nTabs)
+		but isString(vValue)
+			cOutput += Char(34) + vValue + Char(34) 
+		but isNumber(vValue)
+			cOutput += "" + vValue
+ 		else	
 			? C_ERROR_UNEXPECTED		
 		ok
 		if t != len(aList) 
@@ -103,14 +104,10 @@ func List2JSON_processListValue aSubList,nTabs
 		cOutput += List2JSON_process( aSubList, nTabs )
 		nTabs--
 		cOutput += Copy(Tab,nTabs) + "}" 
-	but isString(aSubList[1]) or isNumber(aSubList[1])
+	but isString(aSubList[1]) or isNumber(aSubList[1]) 
 		cOutput += List2JSON_processSubList(aSubList,nTabs)
 	else 
-		cOutput += "[" + nl
-		nTabs++
 		cOutput += List2JSON_processSubList( aSubList, nTabs )
-		nTabs--
-		cOutput += Copy(Tab,nTabs) + "]" 
 	ok
 	return cOutput
 
